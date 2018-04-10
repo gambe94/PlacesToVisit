@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PlacesToVisit</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_create_place_to_visit">CreatePlaceToVisitActivity</string>
+    <string name="title_activity_places_list">PlacesListActivity</string>
+    <string name="updated">Place updated in the list!</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="added">Place added to the list!</string>
+    <string name="places_to_visit">Places to visit</string>
+    <string name="add_places_to_visit">Add places to visit</string>
+
+</resources>
