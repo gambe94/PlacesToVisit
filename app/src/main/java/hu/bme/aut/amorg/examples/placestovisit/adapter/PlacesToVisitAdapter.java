@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,12 +19,11 @@ import android.widget.Toast;
 import java.util.List;
 
 import hu.bme.aut.amorg.examples.placestovisit.CreatePlaceToVisitActivity;
-import hu.bme.aut.amorg.examples.placestovisit.ItemTouchHelperAdapter;
 import hu.bme.aut.amorg.examples.placestovisit.R;
 import hu.bme.aut.amorg.examples.placestovisit.data.Place;
 import hu.bme.aut.amorg.examples.placestovisit.data.PlaceDatabase;
+import hu.bme.aut.amorg.examples.placestovisit.helper.ItemTouchHelperAdapter;
 
-import static android.support.v7.widget.helper.ItemTouchHelper.Callback.makeMovementFlags;
 import static hu.bme.aut.amorg.examples.placestovisit.PlacesListActivity.REQUEST_EDIT_PLACE_CODE;
 
 public class PlacesToVisitAdapter extends
@@ -110,12 +109,13 @@ public class PlacesToVisitAdapter extends
     }
 
     @Override
-    public void onItemMove(int fromPosition, int toPosition) {
-
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        return false;
     }
 
     @Override
     public void onItemDismiss(final int position) {
+        Log.d("DRAG hivodik", String.valueOf(position));
         final Place place =  placesToVisit.get(position);
         final Handler handler=new Handler();
         new Thread(new Runnable() {
@@ -133,8 +133,6 @@ public class PlacesToVisitAdapter extends
             }
         }).start();
     }
-
-
 
 
     class PlacesViewHolder extends RecyclerView.ViewHolder

@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,16 +23,18 @@ import java.util.List;
 import hu.bme.aut.amorg.examples.placestovisit.adapter.PlacesToVisitAdapter;
 import hu.bme.aut.amorg.examples.placestovisit.data.Place;
 import hu.bme.aut.amorg.examples.placestovisit.data.PlaceDatabase;
+import hu.bme.aut.amorg.examples.placestovisit.helper.OnStartDragListener;
+import hu.bme.aut.amorg.examples.placestovisit.helper.SimpleItemTouchHelperCallback;
 import hu.bme.aut.amorg.examples.placestovisit.view.EmptyRecyclerView;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.Callback.makeMovementFlags;
 
-public class PlacesListActivity extends AppCompatActivity {
+public class PlacesListActivity extends AppCompatActivity implements OnStartDragListener {
 
     public static final int REQUEST_NEW_PLACE_CODE = 100;
     public static final int REQUEST_EDIT_PLACE_CODE = 101;
 
-    private RecyclerView recyclerView;
+
     private PlacesToVisitAdapter adapter;
     private PlaceDatabase db;
 
@@ -40,6 +43,7 @@ public class PlacesListActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private CoordinatorLayout coordinatorLayout;
 
+    private ItemTouchHelper mItemTouchHelper;
 
 
 
@@ -63,12 +67,7 @@ public class PlacesListActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-//                        recyclerView = findViewById(R.id.placesListRV);
-//                        adapter = new PlacesToVisitAdapter(PlacesListActivity.this, db, placesToVisit);
-//                        recyclerView.setLayoutManager(new LinearLayoutManager((getApplicationContext())));
-//                        recyclerView.setAdapter(adapter);
-//
-//                        registerForContextMenu(recyclerView);
+
                         coordinatorLayout = findViewById(R.id.main_coordinator_layout);
 
                         emptyRecyclerView = findViewById(R.id.placesListERV);
@@ -77,19 +76,15 @@ public class PlacesListActivity extends AppCompatActivity {
                         emptyRecyclerView.setAdapter(adapter);
                         registerForContextMenu(emptyRecyclerView);
 
-
-
-
-
-
-
-
-
-
-
-
                         View emptyTV= findViewById(R.id.emptyTV);
                         emptyRecyclerView.setEmptyView(emptyTV);
+
+
+                        //SET TOUCH HELPER
+
+                        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+                        mItemTouchHelper = new ItemTouchHelper(callback);
+                        mItemTouchHelper.attachToRecyclerView(emptyRecyclerView);
 
                         emptyTV.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -111,6 +106,8 @@ public class PlacesListActivity extends AppCompatActivity {
                 showNewPlaceDialog();
             }
         });
+
+
 
 
 
@@ -214,4 +211,8 @@ public class PlacesListActivity extends AppCompatActivity {
         Snackbar.make(coordinatorLayout,text,Snackbar.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
+    }
 }
